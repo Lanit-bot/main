@@ -7,7 +7,7 @@ import csv
 import pandas as pd
 import string
 
-def vecofdists():
+def vecofdists(vecint):
     coscos = []
     for i in range(len(vecint)):
         idi = pdt[pdt['Пол'].notnull()]['все интересы'][i]
@@ -35,7 +35,7 @@ def findid_content(pdt,end):
         vecint.append(get_mean(i))
     inpint = get_mean(end[1])
     vecdist = []
-    hip = vecofdists()
+    hip = vecofdists(vecint)
     bofimu = pdt[pdt['id'] == hip[0]]['Фильмы']+pdt[pdt['id'] == hip[0]]['Книга']+pdt[pdt['id'] == hip[0]]['Музыка']
     final = []
     final.append(hip)
