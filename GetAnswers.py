@@ -39,20 +39,38 @@ def splitters(anq):
             anq1+=meow[i]+' '
     return anq1
 
-injson = input()
-meow = injson.replace('[','').replace('{','').replace(']','').replace('}','').replace('"','').replace('answer','').replace('questionId:','').replace(':',',').replace(',,',',')
-end = ['','','','','','']
-ans = meow.split(',')
-for i in range(len(ans)):
-    try:
-        if int(ans[i]) > 5:
-            end[0] = ans[i]
-        else:
-            end[int(ans[i])+1] = ans[i+1]
-    except ValueError:
-        pass
-    #print(end)
-#в end хранится список сортированный
-for i in range(len(end)):
-    end[i] = splitters(end[i])
-end[1] = end[1]+end[5]
+def GetAnswers(json_string: str):
+    # json_string в формате
+    # "person id":
+    #   [
+    #       {"questionId":"1","answer":"ans; ans; ..."},
+    #       {"questionId":"2","answer":"ans; ans; ..."},
+    #       {"questionId":"3","answer":"ans; ans; ..."},
+    #       {"questionId":"4","answer":"ans; ans; ..."},
+    #       {"questionId":"0","answer":"ans; ans; ..."}
+    #   ]
+    # example of such data:
+    # r'"132524162":[{"questionId":"1","answer":"\"Хористы; Чернобыль\""},{"questionId":"2","answer":"\"Дюна; Благие знамения\""},{"questionId":"3","answer":"ZHU; Asking Alexandria; Ляпис Трубецкой"},{"questionId":"4","answer":"Игра на муз.инструменте"},{"questionId":"0","answer":"\"Автомобили; Путешествия; Музыка\""}]'
+
+    injson = json_string
+    meow = injson.replace('[', '').replace('{', '').replace(']', '').replace('}', '').replace('"', '').replace('answer',
+                                                                                                               '').replace(
+        'questionId:', '').replace(':', ',').replace(',,', ',')
+    end = ['', '', '', '', '', '']
+    ans = meow.split(',')
+    for i in range(len(ans)):
+        try:
+            if int(ans[i]) > 5:
+                end[0] = ans[i]
+            else:
+                end[int(ans[i]) + 1] = ans[i + 1]
+        except ValueError:
+            pass
+        # print(end)
+    # в end хранится список сортированный
+    for i in range(len(end)):
+        end[i] = splitters(end[i])
+    end[1] = end[1] + end[5]
+
+    return end
+
