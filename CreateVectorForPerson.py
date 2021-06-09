@@ -27,7 +27,7 @@ def get_mean(str): #получение вектора интересов
     print(ans.shape)
     return ans
 
-def findid_content():
+def findid_content(pdt,end):
     fu.download_model('ru', if_exists='ignore')
     ft = fasttext.load_model('cc.ru.300.bin')
     vecint = [] #здесь хранятся все вектора интересов (у кого они заполнены)
