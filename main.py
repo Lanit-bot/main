@@ -3,6 +3,7 @@ import json
 import GetAnswers
 import CreateVectorForPerson
 import FindSimilarPerson
+import processing_dataset
 
 
 def checkJsonData(data: str):
@@ -18,9 +19,9 @@ def main():
     if not checkJsonData(newData):
         raise TypeError
     answersArray = GetAnswers.GetAnswers(newData)
-    vectorMatrix = CreateVectorForPerson.CreateVector(answersArray)
-    personIds = FindSimilarPerson.GetSimilarPerson(vectorMatrix)
-    return personIds
+    pdt = processing_dataset.processing_dataset()
+    similarIds, similarContent = CreateVectorForPerson.findid_content(answersArray)
+    return similarIds, similarContent
 
 
 if __name__ == '__main__':
