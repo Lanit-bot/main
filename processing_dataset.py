@@ -4,8 +4,7 @@ import pymorphy2
 import csv
 import pandas as pd
 import string
-import fasttext.util as fu
-import fasttext
+
 
 def isEnglish(s):
     try:
@@ -71,14 +70,6 @@ def finds_rep(lis,zn1,zn2):
             lis.append(zn2)
     return lis
   
-def get_mean(str): #получение вектора интересов
-    word = str.split(' ')
-    vw = []
-    for i in word:
-        vw.append(ft.get_sentence_vector(i))
-    ans = np.mean(vw, axis = 0)
-    print(ans.shape)
-    return ans
 
 with open("questionary-2.json", "r", encoding="utf8") as read_file:
     now = json.load(read_file)
@@ -143,8 +134,3 @@ for i in range (len(pdt['все интересы'])):
     for j in range(26):
         pdt.at[i,'все интересы'] = finds_rep(pdt.at[i,'все интересы'],fir[j],sec[j])
     pdt.at[i,'все интересы'] = makes(pdt.at[i,'все интересы'])
-fu.download_model('ru', if_exists='ignore')
-ft = fasttext.load_model('cc.ru.300.bin')
-vecint = [] #здесь хранятся все вектора интересов (у кого они заполнены)
-for i in pdt[pdt['Пол'].notnull()]['все интересы']:
-    vecint.append(get_mean(i))
