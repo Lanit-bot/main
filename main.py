@@ -2,7 +2,6 @@ import json
 
 import GetAnswers
 import CreateVectorForPerson
-import FindSimilarPerson
 import processing_dataset
 
 
