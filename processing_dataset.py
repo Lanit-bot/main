@@ -70,67 +70,69 @@ def finds_rep(lis,zn1,zn2):
             lis.append(zn2)
     return lis
   
+def processing_dataset():
+    
+    with open("questionary-2.json", "r", encoding="utf8") as read_file:
+        now = json.load(read_file)
 
-with open("questionary-2.json", "r", encoding="utf8") as read_file:
-    now = json.load(read_file)
-
-with open("users.csv", mode="r", encoding='latin-1') as gen:  #вставка пола, муж - 0, жен - 1
-    csv_reader = csv.reader(gen, delimiter=',')
-    line = 0
-    muz = ''
-    for row in csv_reader:    
-        na = row[0]
-        se = row[1]
-        if line == 0:
-            line+=1
-            muz = se
-        if se == muz:
-            se = '0'
-        else:
-            se = '1'
-        try:
-            if now[0]['participations'][na] != None:
-                try:
-                    if type(now[0]['participations'][na]) == list:
-                        now[0]['participations'][na].append({'questionId':'5','answer':se})
-                    else:
-                        jetz = now[0]['participations'][na]
-                        now[0]['participations'][na] = [jetz]
-                        now[0]['participations'][na].append({'questionId':'5','answer':se})
-                except AttributeError:
-                    print(na)
+    with open("users.csv", mode="r", encoding='latin-1') as gen:  #вставка пола, муж - 0, жен - 1
+        csv_reader = csv.reader(gen, delimiter=',')
+        line = 0
+        muz = ''
+        for row in csv_reader:    
+            na = row[0]
+            se = row[1]
+            if line == 0:
+                line+=1
+                muz = se
+            if se == muz:
+                se = '0'
             else:
-                now[0]['participations'][na] = [{'questionId':'5','answer':se}]
-        except KeyError:
-            pass
+                se = '1'
+            try:
+                if now[0]['participations'][na] != None:
+                    try:
+                        if type(now[0]['participations'][na]) == list:
+                            now[0]['participations'][na].append({'questionId':'5','answer':se})
+                        else:
+                            jetz = now[0]['participations'][na]
+                            now[0]['participations'][na] = [jetz]
+                            now[0]['participations'][na].append({'questionId':'5','answer':se})
+                    except AttributeError:
+                        print(na)
+                else:
+                    now[0]['participations'][na] = [{'questionId':'5','answer':se}]
+            except KeyError:
+                pass
         
-with open("dataset.csv", mode="w", encoding='utf-8') as w_file: 
-    file_writer = csv.writer(w_file, delimiter = ",", lineterminator="\r")
-    file_writer.writerow(["id", "Интересы", "Фильм","Книга", "Музыка","Желаемое хобби","Пол"])
-    for key, value in now[0]['participations'].items():
-        row = [key]+['']*6
-        if value != None:
-            for meow in value:
-                #print(key, meow)
-                idq = meow['questionId']
-                anq = meow['answer']
-                anq = splitters(anq)
-                print(anq)
-                row[int(idq)+1] = anq
-        file_writer.writerow(row) #до этого момента создается таблица со значениями
+    with open("dataset.csv", mode="w", encoding='utf-8') as w_file: 
+        file_writer = csv.writer(w_file, delimiter = ",", lineterminator="\r")
+        file_writer.writerow(["id", "Интересы", "Фильм","Книга", "Музыка","Желаемое хобби","Пол"])
+        for key, value in now[0]['participations'].items():
+            row = [key]+['']*6
+            if value != None:
+                for meow in value:
+                    #print(key, meow)
+                    idq = meow['questionId']
+                    anq = meow['answer']
+                    anq = splitters(anq)
+                    print(anq)
+                    row[int(idq)+1] = anq
+            file_writer.writerow(row) #до этого момента создается таблица со значениями
         
-pdt = pd.read_csv('dataset.csv')
-pdt.loc[:, 'все интересы'] = pdt['Интересы'] + ' ' + pdt['Желаемое хобби']
-pdt.drop('Интересы', axis=1, inplace=True)
-pdt.drop('Желаемое хобби', axis=1, inplace=True)
-pdt['все интересы'].fillna(' ', inplace = True)
-pdt.loc[:, 'все интересы'] = pdt.loc[:, 'все интересы'].str.split(' ')
-fir = ['веосипед','велосипед','it','coding', 'путешествие', 'авто', 'альпин','йог','английский','компьютерный_игра','есть', 'барабан',
-      'гитар', 'клавиш', 'фортепиано','компьютер_сборка', "нет_такой",'вино','чтение', 'шить', 'швейный', 'спортилитанец', 
-      'танцы','танец','спорт','книг']
-sec = ['велосипед','велосипед','программирование','программирование','путешествие','авто','альпинизм','йога','английский','видеоигра','еда','барабаны','гитара','фортепиано','фортепиано','компьютерныйжелезо',
-       ' ','вино','книги','шить','шить','танец','танец','танец','спорт','книги']
-for i in range (len(pdt['все интересы'])):
-    for j in range(26):
-        pdt.at[i,'все интересы'] = finds_rep(pdt.at[i,'все интересы'],fir[j],sec[j])
-    pdt.at[i,'все интересы'] = makes(pdt.at[i,'все интересы'])
+    pdt = pd.read_csv('dataset.csv')
+    pdt.loc[:, 'все интересы'] = pdt['Интересы'] + ' ' + pdt['Желаемое хобби']
+    pdt.drop('Интересы', axis=1, inplace=True)
+    pdt.drop('Желаемое хобби', axis=1, inplace=True)
+    pdt['все интересы'].fillna(' ', inplace = True)
+    pdt.loc[:, 'все интересы'] = pdt.loc[:, 'все интересы'].str.split(' ')
+    fir = ['веосипед','велосипед','it','coding', 'путешествие', 'авто', 'альпин','йог','английский','компьютерный_игра','есть', 'барабан',
+          'гитар', 'клавиш', 'фортепиано','компьютер_сборка', "нет_такой",'вино','чтение', 'шить', 'швейный', 'спортилитанец', 
+          'танцы','танец','спорт','книг']
+    sec = ['велосипед','велосипед','программирование','программирование','путешествие','авто','альпинизм','йога','английский','видеоигра','еда','барабаны','гитара','фортепиано','фортепиано','компьютерныйжелезо',
+           ' ','вино','книги','шить','шить','танец','танец','танец','спорт','книги']
+    for i in range (len(pdt['все интересы'])):
+        for j in range(26):
+            pdt.at[i,'все интересы'] = finds_rep(pdt.at[i,'все интересы'],fir[j],sec[j])
+        pdt.at[i,'все интересы'] = makes(pdt.at[i,'все интересы'])
+    return pdt
