@@ -55,3 +55,4 @@ for i in range(len(ans)):
 #в end хранится список сортированный
 for i in range(len(end)):
     end[i] = splitters(end[i])
+end[1] = end[1]+end[5]
