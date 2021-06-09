@@ -135,4 +135,4 @@ def processing_dataset():
         for j in range(26):
             pdt.at[i,'все интересы'] = finds_rep(pdt.at[i,'все интересы'],fir[j],sec[j])
         pdt.at[i,'все интересы'] = makes(pdt.at[i,'все интересы'])
-    return pdt
+    return pdt #pdt объект dataseries!! так что он пандочка
