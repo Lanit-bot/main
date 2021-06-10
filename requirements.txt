@@ -1,0 +1,9 @@
+json == 
+csv == 
+pymorph2 == 
+pyspellchecker == 
+string == 
+pandas == 
+numpy == 
+scipy == 
+fasttext == 
