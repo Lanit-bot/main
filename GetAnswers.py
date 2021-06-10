@@ -1,6 +1,7 @@
-import csv #БОЛЬШЕ НЕ ЗАПУСКАТЬ ТАБЛИЦА ЕСТЬ В CSV
+import csv  # БОЛЬШЕ НЕ ЗАПУСКАТЬ ТАБЛИЦА ЕСТЬ В CSV
 from spellchecker import SpellChecker
 import pymorphy2
+
 
 def isEnglish(s):
     try:
@@ -9,8 +10,8 @@ def isEnglish(s):
         return False
     else:
         return True
-    
-    
+
+
 def checking(a):
     mm = pymorphy2.MorphAnalyzer()
     ans = ''
@@ -19,25 +20,27 @@ def checking(a):
         if not isEnglish(cra[i]):
             prev = cra[i]
             cra[i] = mm.parse(cra[i])[0].normal_form
-            if cra[i] == None:
+            if cra[i] is None:
                 cra[i] = prev
-        ans+=cra[i]
-        if i != len(cra)-1:
+        ans += cra[i]
+        if i != len(cra) - 1:
             if len(cra[i]) > 0 and cra[i][0].isalnum():
-                ans+='_'
+                ans += '_'
     return ans
-            
+
+
 def splitters(anq):
-    if anq!='':
+    if anq != '':
         anq1 = ''
-        #print(anq)
+        # print(anq)
         meow = anq.split(';')
         for i in range(len(meow)):
             meow[i] = checking(meow[i])
-            meow[i] = ''.join(e for e in meow[i] if e.isalnum() or e=="_")
+            meow[i] = ''.join(e for e in meow[i] if e.isalnum() or e == "_")
             meow[i] = meow[i].lower()
-            anq1+=meow[i]+' '
+            anq1 += meow[i] + ' '
     return anq1
+
 
 def GetAnswers(json_string: str):
     # json_string в формате
@@ -50,12 +53,28 @@ def GetAnswers(json_string: str):
     #       {"questionId":"0","answer":"ans; ans; ..."}
     #   ]
     # example of such data:
-    # r'"132524162":[{"questionId":"1","answer":"\"Хористы; Чернобыль\""},{"questionId":"2","answer":"\"Дюна; Благие знамения\""},{"questionId":"3","answer":"ZHU; Asking Alexandria; Ляпис Трубецкой"},{"questionId":"4","answer":"Игра на муз.инструменте"},{"questionId":"0","answer":"\"Автомобили; Путешествия; Музыка\""}]'
+    # r'{"132524162":[{"questionId":"1","answer":"\"Хористы; Чернобыль\""},{"questionId":"2","answer":"\"Дюна; Благие знамения\""},{"questionId":"3","answer":"ZHU; Asking Alexandria; Ляпис Трубецкой"},{"questionId":"4","answer":"Игра на муз.инструменте"},{"questionId":"0","answer":"\"Автомобили; Путешествия; Музыка\""}]'
 
     injson = json_string
-    meow = injson.replace('[', '').replace('{', '').replace(']', '').replace('}', '').replace('"', '').replace('answer',
-                                                                                                               '').replace(
-        'questionId:', '').replace(':', ',').replace(',,', ',')
+    meow = injson.replace(
+        '[',
+        '').replace(
+        '{',
+        '').replace(
+            ']',
+            '').replace(
+                '}',
+                '').replace(
+                    '"',
+                    '').replace(
+                        'answer',
+                        '').replace(
+                            'questionId:',
+                            '').replace(
+                                ':',
+                                ',').replace(
+                                    ',,',
+        ',')
     end = ['', '', '', '', '', '']
     ans = meow.split(',')
     for i in range(len(ans)):
@@ -73,4 +92,3 @@ def GetAnswers(json_string: str):
     end[1] = end[1] + end[5]
 
     return end
-
