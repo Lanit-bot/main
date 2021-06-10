@@ -1,9 +1,9 @@
-json == 
-csv == 
-pymorph2 == 
-pyspellchecker == 
-string == 
-pandas == 
-numpy == 
-scipy == 
-fasttext == 
+json==
+csv==
+pymorph2==
+pyspellchecker==
+string==
+pandas==
+numpy==
+scipy==
+fasttext==
