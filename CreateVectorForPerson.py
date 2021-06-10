@@ -10,8 +10,10 @@ import string
 def vecofdists(vecint):
     coscos = []
     for i in range(len(vecint)):
-        idi = pdt[pdt['Пол'].notnull()]['все интересы'][i]
+        idi = pdt['id'].iloc[i]
         cosa = cosine(vecint[i],inpint)
+        if np.isnan(cosa):
+            continue
         cel = [cosa,idi]
         coscos.append(cel)
     coscos.sort(key=lambda x: x[1])
@@ -33,12 +35,12 @@ def findid_content(pdt,end):
     vecint = [] #здесь хранятся все вектора интересов (у кого они заполнены)
     for i in pdt[pdt['Пол'].notnull()]['все интересы']:
         vecint.append(get_mean(i))
-    inpint = get_mean(end[1])
-    vecdist = []
-    hip = vecofdists(vecint)
-    bofimu = pdt[pdt['id'] == hip[0]]['Фильмы']+pdt[pdt['id'] == hip[0]]['Книга']+pdt[pdt['id'] == hip[0]]['Музыка']
-    final = []
-    final.append(hip)
-    final.append(bofimu)
-    return final #final содержит два списка --- первый - айдишники, второй - контент
+        inpint = get_mean(end[1])
+        vecdist = []
+        hip = vecofdists(vecint)
+        bofimu = pdt[pdt['id'] == hip[0][1]]['Фильм']+pdt[pdt['id'] == hip[0][1]]['Книга']+pdt[pdt['id'] == hip[0][1]]['Музыка']
+        final = []
+        final.append([hip[0][1],hip[1][1],hip[2][1]])
+        final.append(bofimu)
+        return final   
 
