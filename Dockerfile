@@ -18,4 +18,10 @@ RUN apt-get install build-essential -y
 RUN apt-get install wget -y
 RUN pip install fasttext
 
+RUN python main.py
+
+EXPOSE 80
+
+CMD ["uvicorn", "server:app", "--reload", "--host", "0.0.0.0", "--port", "80"]
+
 RUN wget https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.ru.300.bin.gz
