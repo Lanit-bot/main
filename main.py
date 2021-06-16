@@ -14,10 +14,15 @@ def checkJsonData(data: str):
 
 
 def action(newData):
-    if not checkJsonData(newData): #проверка корректности введенных данных
+    #проверка корректности введенных данных
+    if not checkJsonData(newData): 
         raise TypeError
-    answersArray = GetAnswers.GetAnswers(newData) #функция принимает строку и возвращает ее обработанной
-    pdt = processing_dataset.processing_dataset() #база данных, полученная из json, обрабатывается и представляется pandas-объектом
+    #функция принимает строку и возвращает ее обработанной
+    answersArray = GetAnswers.GetAnswers(newData) 
+    #база данных, полученная из json, обрабатывается и представляется pandas-объектом
+    pdt = processing_dataset.processing_dataset() 
+    #здесь скачивается fasttext (или navec), создаются вектора "интересов", 
+    #находятся расстояния между входным и интересами из базы данных
     similarIds, similarContent = CreateVectorForPerson.findid_content(
-        pdt,answersArray) #здесь скачивается fasttext (или navec), создаются вектора "интересов", находятся расстояния между входным и интересами из базы данных
+        pdt,answersArray) 
     return similarIds, similarContent #возвращается список id и контента
