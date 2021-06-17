@@ -1,5 +1,4 @@
-import fasttext.util as fu
-import fasttext
+from navec import Navec
 import json
 import spellchecker
 import pymorphy2
@@ -19,33 +18,50 @@ def vecofdists(vecint, pdt, inpint):
             continue
         cel = [cosa, idi]
         coscos.append(cel)
-    coscos.sort(key=lambda x: x[1])
-    ans = [coscos[0], coscos[1], coscos[2]]
+        #print(cosa)
+    coscos.sort(key=lambda x: x[0])
+    return coscos
+
+
+def get_sentence_vector(unline,nana):
+    ws = unline.split('_')
+    vw = []
+    for i in ws:
+        try:
+            vw.append(nana[i])
+        except KeyError:
+            vw.append(nana['<unk>'])
+    ans = np.mean(vw, axis=0)
     return ans
 
-
-def get_mean(str,ft):  # получение вектора интересов
+def get_mean(str, nana):  # получение вектора интересов
     word = str.split(' ')
     vw = []
     for i in word:
-        vw.append(ft.get_sentence_vector(i))
+        vw.append(get_sentence_vector(i,nana))
     ans = np.mean(vw, axis=0)
-    print(ans.shape)
+    #print(ans.shape)
     return ans
 
+"""def findint(hip,pdt,inte):
+    i = 0
+    while i < len(hip) and (pdt[pdt['id'] == hip[i][1]][inte] != ''):
+        i+=1
+    return pdt[pdt['id'] == hip[i][1]][inte]"""
 
 def findid_content(pdt, end):
-    fu.download_model('ru', if_exists='ignore')
-    ft = fasttext.load_model('cc.ru.300.bin')
+    path = 'navec_hudlit_v1_12B_500K_300d_100q.tar'
+    nana = Navec.load(path)
     vecint = []  # здесь хранятся все вектора интересов (у кого они заполнены)
     for i in pdt[pdt['Пол'].notnull()]['все интересы']:
-        vecint.append(get_mean(i),ft)
-        inpint = get_mean(end[1])
-        vecdist = []
-        hip = vecofdists(vecint, pdt, inpint)
-        bofimu = pdt[pdt['id'] == hip[0][1]]['Фильм'] + pdt[pdt['id']
-                                                            == hip[0][1]]['Книга'] + pdt[pdt['id'] == hip[0][1]]['Музыка']
-        final = []
-        final.append([hip[0][1], hip[1][1], hip[2][1]])
-        final.append(bofimu)
-        return final
+        vecint.append(get_mean(i,nana))
+    inpint = get_mean(end[1],nana)
+    hip = vecofdists(vecint, pdt, inpint)
+    movie = pdt[pdt['id'] == hip[0][1]]['Фильм']
+    book = pdt[pdt['id'] == hip[0][1]]['Книга']
+    music = pdt[pdt['id'] == hip[0][1]]['Музыка']
+    bofimu = movie+book+music
+    final = []
+    final.append([hip[0][1], hip[1][1], hip[2][1]])
+    final.append(bofimu)
+    return final
