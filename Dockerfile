@@ -18,8 +18,6 @@ RUN apt-get install gzip
 RUN apt-get update
 RUN apt-get install build-essential -y
 RUN apt-get install wget -y
-RUN wget https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.ru.300.bin.gz
-
 
 EXPOSE 80
 
