@@ -18,6 +18,7 @@ RUN apt-get install gzip
 RUN apt-get update
 RUN apt-get install build-essential -y
 RUN apt-get install wget -y
+RUN wget https://storage.yandexcloud.net/natasha-navec/packs/navec_hudlit_v1_12B_500K_300d_100q.tar
 
 EXPOSE 80
 
