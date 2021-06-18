@@ -44,17 +44,9 @@ def splitters(anq):
 
 def GetAnswers(json_string: str):
     # json_string в формате
-    # "person id":
-    #   [
-    #       {"questionId":"1","answer":"ans; ans; ..."},
-    #       {"questionId":"2","answer":"ans; ans; ..."},
-    #       {"questionId":"3","answer":"ans; ans; ..."},
-    #       {"questionId":"4","answer":"ans; ans; ..."},
-    #       {"questionId":"0","answer":"ans; ans; ..."}
-    #   ]
     # example of such data:
     # r'{"132524162":[{"questionId":"1","answer":"\"Хористы; Чернобыль\""},{"questionId":"2","answer":"\"Дюна; Благие знамения\""},{"questionId":"3","answer":"ZHU; Asking Alexandria; Ляпис Трубецкой"},{"questionId":"4","answer":"Игра на муз.инструменте"},{"questionId":"0","answer":"\"Автомобили; Путешествия; Музыка\""}]'
-
+    #интересы разделяются пробелом
     injson = json_string
     meow = injson.replace(
         '[',
@@ -75,7 +67,7 @@ def GetAnswers(json_string: str):
                                 ',').replace(
                                     ',,',
         ',')
-    end = ['', '', '', '', '', '']
+    '''end = ['', '', '', '', '', '']
     ans = meow.split(',')
     for i in range(len(ans)):
         try:
@@ -89,6 +81,6 @@ def GetAnswers(json_string: str):
     # в end хранится список сортированный
     for i in range(len(end)):
         end[i] = splitters(end[i])
-    end[1] = end[1] + end[5]
-
+    end[1] = end[1] + end[5]'''
+    end = splitters(meow)
     return end
