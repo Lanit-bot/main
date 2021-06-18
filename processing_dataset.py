@@ -125,6 +125,8 @@ def processing_dataset():
                     #print(key, meow)
                     idq = meow['questionId']
                     anq = meow['answer']
+                    if meow['questionId'] == "0" or meow['questionId'] == "4":
+                        anq = splitters(anq)
                     anq = splitters(anq)
                     print(anq)
                     row[int(idq) + 1] = anq
