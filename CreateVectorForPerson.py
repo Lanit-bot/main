@@ -43,24 +43,25 @@ def get_mean(str, nana):  # получение вектора интересов
     #print(ans.shape)
     return ans
 
-"""def findint(hip,pdt,inte):
+def findint(hip,pdt,inte):
     i = 0
-    while i < len(hip) and (pdt[pdt['id'] == hip[i][1]][inte] != ''):
+    while i < len(hip) and pd.isna(pdt[pdt['id'] == hip[i][1]][inte].iloc[0]):
         i+=1
-    return pdt[pdt['id'] == hip[i][1]][inte]"""
+    #print(pdt[pdt['id'] == hip[i][1]][inte])
+    return pdt[pdt['id'] == hip[i][1]][inte].iloc[0]
 
-def findid_content(pdt, end):
-    path = 'navec_hudlit_v1_12B_500K_300d_100q.tar'
-    nana = Navec.load(path)
+def findid_content(pdt, end, nana):
+#    path = 'navec_hudlit_v1_12B_500K_300d_100q.tar'
+#    nana = Navec.load(path)
     vecint = []  # здесь хранятся все вектора интересов (у кого они заполнены)
     for i in pdt[pdt['Пол'].notnull()]['все интересы']:
         vecint.append(get_mean(i,nana))
-    inpint = get_mean(end[1],nana)
+    inpint = get_mean(end,nana)
     hip = vecofdists(vecint, pdt, inpint)
-    movie = pdt[pdt['id'] == hip[0][1]]['Фильм']
-    book = pdt[pdt['id'] == hip[0][1]]['Книга']
-    music = pdt[pdt['id'] == hip[0][1]]['Музыка']
-    bofimu = movie+book+music
+    movie = findint(hip, pdt, 'Фильм')
+    book = findint(hip, pdt, 'Книга')
+    music = findint(hip, pdt, 'Музыка')
+    bofimu = movie+ " - "+ book+ " - "+music
     final = []
     final.append([hip[0][1], hip[1][1], hip[2][1]])
     final.append(bofimu)
